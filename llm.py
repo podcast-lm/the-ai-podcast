@@ -2,7 +2,7 @@ import hashlib
 import json
 import os
 import re
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Tuple
 
 import anthropic
 
@@ -109,6 +109,7 @@ class LLM:
         temperature: float = 0.5,
         response_prefill: Optional[str] = None,
         cache: bool = False,
+        trace_prefix: Optional[str] = None,
         **kwargs,
     ) -> str:
         """
@@ -120,6 +121,7 @@ class LLM:
             temperature: Temperature parameter
             response_prefill: Optional response prefix
             cache: Whether to use caching
+            trace_prefix: If provided, save prompt/response to files with this prefix
             **kwargs: Template variable replacements
 
         Returns:
@@ -161,6 +163,12 @@ class LLM:
         if cache:
             # Save to cache
             with open(cache_path, "w") as f:
+                f.write(result)
+
+        if trace_prefix:
+            with open(f"{trace_prefix}_prompt.txt", "w") as f:
+                f.write(prompt)
+            with open(f"{trace_prefix}_response.txt", "w") as f:
                 f.write(result)
 
         return result
