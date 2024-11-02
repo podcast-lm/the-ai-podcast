@@ -13,7 +13,7 @@ class LLM:
     def __init__(
         self,
         api_key: str,
-        model: str = "claude-3-5-sonnet-20241022",
+        model: str = "claude-3-5-sonnet-20240620",
         cache_dir: str = ".cache",
     ):
         """

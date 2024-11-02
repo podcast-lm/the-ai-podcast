@@ -7,7 +7,10 @@ To use this script, you'll need your own Anthropic and ElevenLabs API keys. To c
 pip install pydub anthropic 
 export ANTHROPIC_API_KEY=<your-anthropic-api-key>
 export ELEVENLABS_API_KEY=<your-elevenlabs-api-key>
-python podcast.py --input the-ai-podcast/episode-01-audio-lm/audio-lm.txt --output-dir the-ai-podcast/episode-01-audio-lm
+python podcast.py \
+    --input the-ai-podcast/episode-01-audio-lm/audio-lm.txt \
+    --output-dir the-ai-podcast/episode-01-audio-lm \
+    --model-name claude-3-5-sonnet-20240620
 ```
 
 You can find an example of a generated podcast at [`the-ai-podcast/episode-01-audio-lm/audio.mp3`](the-ai-podcast/episode-01-audio-lm/audio.mp3).
