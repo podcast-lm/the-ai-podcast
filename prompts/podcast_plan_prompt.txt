@@ -1,0 +1,85 @@
+You are an expert podcast content creator assigned to develop an engaging and informative monologue for the renowned podcast, "The AI Podcast." Your goal is to create a structured outline to guide the development of a knowledgeable, thought-provoking podcast episode that demonstrates critical thinking and a deep understanding of the subject matter.
+
+Before we begin, here are the materials you'll be working with:
+
+<document>
+{{DOCUMENT}}
+</document>
+
+<metadata>
+{{METADATA}}
+</metadata>
+
+<summary>
+{{SUMMARY}}
+</summary>
+
+<deep_dive>
+{{DEEPDIVE}}
+</deep_dive>
+
+Your task is to create a detailed plan for the podcast monologue. Please wrap your thought process for each major step in <analysis> tags, and present your final plan within <monologue_planning> tags.
+
+Follow these steps to create your plan:
+
+1. Identify the main topic and target audience based on the provided materials.
+2. Analyze audience demographics and interests to tailor the content accordingly.
+3. Review each input section (document, metadata, summary, deep_dive) and compile essential facts, quotes, and statistics. List these key elements explicitly for each section.
+4. Brainstorm potential hooks or attention-grabbing opening statements to start the monologue.
+5. Develop a structured list of main talking points that cover a range of information. Start with foundational topics, then delve into more specific points. Conclude with a thoughtful ending, highlighting an important takeaway or consideration for the future. Ensure these talking points fit together cohesively as a single narrative. Number each main point, and for each one, create detailed subpoints to elaborate further. Number these subpoints as well.
+6. For each main talking point, consider potential counterarguments or alternative perspectives.
+7. Critically evaluate the talking points:
+   - Assess the validity of the information. Is it supported by solid evidence?
+   - Reflect on the ethical aspects of the topic. Are there moral implications to explore?
+   - Consider the societal impact of the topic. How does it affect various groups within society?
+8. Identify potential controversial or sensitive aspects and plan respectful ways to address them.
+9. Brainstorm 2-3 engaging questions or thought experiments to involve the audience.
+10. Include all questions and answers from the deep dive section to give the audience a deeper understanding of the topic. Explain how these questions can enhance the monologue.
+11. Refine your talking points based on this critical evaluation, audience considerations, and the deep dive questions.
+
+Proceed step by step, detailing your thought processes as thoroughly as possible (100-200 words per paragraph in complete sentences, avoiding bullet points). Format your response as a research note.
+For each step, wrap your thought process in <analysis> tags to show your reasoning in detail. Then, present your final monologue plan within <monologue_planning> tags, structured as follows:
+
+<monologue_planning>
+1. Main Topic and Target Audience:
+   [Your content here]
+
+2. Audience Analysis:
+   [Your content here]
+
+3. Key Facts, Quotes, and Statistics:
+   [Your content here, organized by input section]
+
+4. Potential Opening Hooks:
+   [Your content here]
+
+5. Main Talking Points:
+   1. [Main point 1]
+      1.1 [Subpoint]
+      1.2 [Subpoint]
+      Counterarguments/Alternative Perspectives:
+      [Your content here]
+   2. [Main point 2]
+      2.1 [Subpoint]
+      2.2 [Subpoint]
+      Counterarguments/Alternative Perspectives:
+      [Your content here]
+   [Continue as needed]
+
+6. Critical Evaluation:
+   [Your content here]
+
+7. Addressing Controversial Aspects:
+   [Your content here]
+
+8. Engaging Questions/Thought Experiments:
+   [Your content here]
+
+9. Selected Deep Dive Questions and Answers:
+   - [Put the question here]
+
+10. Refined Talking Points:
+    [Your content here]
+</monologue_planning>
+
+Remember to provide detailed explanations and justifications for your choices throughout the planning process. Your goal is to create a comprehensive and well-structured plan that will serve as a strong foundation for an engaging and informative podcast monologue.
