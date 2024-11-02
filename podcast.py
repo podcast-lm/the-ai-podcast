@@ -12,6 +12,7 @@ def create_podcast_script(
     anthropic_api_key: str,
     model_name: str,
     use_cache: bool = True,
+    save_traces: bool = False,
 ) -> str:
     """
     Create a podcast script from input material using LLM generation.
@@ -22,6 +23,7 @@ def create_podcast_script(
         anthropic_api_key: Anthropic API key
         model_name: Name of the model to use
         use_cache: Whether to use cached LLM responses
+        save_traces: Whether to save LLM generation traces to files
 
     Returns:
         str: The generated podcast script
@@ -29,6 +31,12 @@ def create_podcast_script(
     logging.info("Initializing LLM helper")
     # Initialize LLM helper
     llm = LLM(api_key=anthropic_api_key, model=model_name)
+
+    # Create traces directory if saving traces
+    traces_dir = os.path.join(output_dir, "traces") if save_traces else None
+    if save_traces:
+        os.makedirs(traces_dir, exist_ok=True)
+        logging.info(f"Writing traces to {traces_dir}")
 
     logging.info("Reading input document")
     # Read input document
@@ -38,7 +46,10 @@ def create_podcast_script(
     logging.info("Getting source metadata")
     # Get source info
     response = llm.generate(
-        "prompts/metadata_note_prompt.txt", cache=use_cache, DOCUMENT=document
+        "prompts/metadata_note_prompt.txt",
+        cache=use_cache,
+        trace_prefix=os.path.join(traces_dir, "metadata") if save_traces else None,
+        DOCUMENT=document,
     )
     source_info = llm.extract_tag(response, "research_note").strip()
 
@@ -47,6 +58,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/summary_note_prompt.txt",
         cache=use_cache,
+        trace_prefix=os.path.join(traces_dir, "summary") if save_traces else None,
         DOCUMENT=document,
         META=source_info,
     )
@@ -58,6 +70,7 @@ def create_podcast_script(
         "prompts/deep_dive_questions_prompt.txt",
         cache=use_cache,
         response_prefill="<analysis>",
+        trace_prefix=os.path.join(traces_dir, "questions") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -74,6 +87,9 @@ def create_podcast_script(
             "prompts/deep_dive_answer_prompt.txt",
             response_prefill="The following is the original question, my analysis and answer:",
             cache=use_cache,
+            trace_prefix=(
+                os.path.join(traces_dir, f"answer_{i}") if save_traces else None
+            ),
             DOCUMENT=document,
             METADATA=source_info,
             SUMMARY=source_summary,
@@ -88,6 +104,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/podcast_plan_prompt.txt",
         cache=use_cache,
+        trace_prefix=os.path.join(traces_dir, "plan") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -100,6 +117,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/podcast_draft_prompt.txt",
         cache=use_cache,
+        trace_prefix=os.path.join(traces_dir, "draft") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -113,6 +131,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/podcast_revise_prompt.txt",
         cache=use_cache,
+        trace_prefix=os.path.join(traces_dir, "revised") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -126,6 +145,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/podcast_final_prompt.txt",
         cache=use_cache,
+        trace_prefix=os.path.join(traces_dir, "final") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -166,6 +186,11 @@ def parse_args() -> argparse.Namespace:
         default="claude-3-5-sonnet-20241022",
         help="Name of the model to use",
     )
+    parser.add_argument(
+        "--save-traces",
+        action="store_true",
+        help="Save LLM generation traces to files",
+    )
     return parser.parse_args()
 
 
@@ -185,6 +210,7 @@ def main() -> None:
     logging.info(f"  Cache enabled: {not args.no_cache}")
     logging.info(f"  Voice: {args.voice}")
     logging.info(f"  Model: {args.model_name}")
+    logging.info(f"  Save traces: {args.save_traces}")
 
     logging.info("Getting API keys from environment")
     # Get API keys from environment
@@ -210,6 +236,7 @@ def main() -> None:
         anthropic_api_key=anthropic_api_key,
         model_name=args.model_name,
         use_cache=not args.no_cache,
+        save_traces=args.save_traces,
     )
 
     logging.info("Generating audio from script")
