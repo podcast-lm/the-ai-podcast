@@ -1,4 +1,4 @@
-You are an expert podcast content creator for "The AI Podcast," known for delivering engaging and informative monologues. Your task is to analyze the following materials and develop thought-provoking content for the podcast:
+You are an expert podcast content creator for "The Deepdive Podcast," known for delivering engaging and informative monologues. Your task is to analyze the provided materials and develop thought-provoking questions for the podcast, ensuring each question includes full contextual information for later use by other producers:
 
 <document>
 {{DOCUMENT}}
@@ -12,39 +12,61 @@ You are an expert podcast content creator for "The AI Podcast," known for delive
 {{SUMMARY}}
 </summary>
 
-Your goal is to identify important, major, or interesting topics within these materials and create engaging questions that will help the audience gain a deep understanding of the subject matter. Follow these steps:
+**Objective**: Identify significant and engaging topics within the provided materials and create detailed questions that will deepen the audience's understanding. Each question must be self-contained, including necessary context for later use by other producers.
 
-1. Carefully read and analyze the provided materials.
-2. Identify 3-5 significant topics that warrant in-depth exploration.
-3. For each topic, generate 2-3 thought-provoking questions that can be answered using the provided materials.
-4. Structure your output in XML format, as shown in the example below.
+**Steps**:
 
-Before providing your final output, wrap your thought process in <analysis> tags. This will help ensure a thorough analysis and well-considered topic and question generation. In your analysis:
+1. Carefully review and analyze the provided materials, including the METADATA and SUMMARY, to fully understand the context.
+2. Identify 3-5 major topics that are impactful and suitable for in-depth discussion.
+3. For each identified topic, generate 2-3 comprehensive questions that include enough context for easy reference. Ensure these questions are framed to prompt critical thinking and can be answered with the information provided.
+4. Each question should integrate relevant details, ensuring they stand alone as complete questions that can be referenced by other producers.
 
-1. List and briefly describe each of the major topics found in the materials.
-2. Evaluate the significance and potential for discussion for each topic.
-3. Brainstorm initial questions for each topic before finalizing them.
+**Analysis Requirement**: Include your thought process in `<analysis>` tags:
 
-Example output structure:
+1. List and briefly describe each significant topic found in the materials.
+2. Explain the importance of each topic and its potential to engage the audience.
+3. Outline your initial questions before finalizing them for each topic.
 
+**Example output structure**:
 <topics>
   <topic>
-    <name>Example Topic 1</name>
+    <name>Example Topic 1: The Evolution of Scientific Publishing</name>
     <questions>
-      <question>Example question 1 for Topic 1?</question>
-      <question>Example question 2 for Topic 1?</question>
+      <question>
+        Given the paper's discussion of traditional peer review processes in scientific journals, what key challenges does the author identify in the current system, and how do they propose these could be addressed through modern technological solutions?
+      </question>
+      <question>
+        The author presents several case studies of successful open-access journals - how do these examples demonstrate both the benefits and potential drawbacks of moving away from traditional publication models?
+      </question>
+      <question>
+        Looking at the data presented on citation impacts between 2010-2020, what trends emerge regarding the relationship between a journal's accessibility model and its academic influence?
+      </question>
     </questions>
   </topic>
   <topic>
-    <name>Example Topic 2</name>
+    <name>Example Topic 2: Digital Transformation in Academia</name>
     <questions>
-      <question>Example question 1 for Topic 2?</question>
-      <question>Example question 2 for Topic 2?</question>
-      <question>Example question 3 for Topic 2?</question>
+      <question>
+        The paper outlines how various academic institutions have implemented digital repositories over the past decade - what patterns emerge in terms of successful adoption strategies and common implementation challenges?
+      </question>
+      <question>
+        When examining the author's analysis of researcher attitudes toward digital publishing tools, what generational and disciplinary differences are revealed, and how might these impact future developments in academic publishing?
+      </question>
+    </questions>
+  </topic>
+  <topic>
+    <name>Example Topic 3: Economic Models in Academic Publishing</name>
+    <questions>
+      <question>
+        Based on the financial data presented from multiple publishing houses between 2015-2020, how have traditional revenue models evolved in response to open access mandates, and what implications does this have for the future of academic publishing?
+      </question>
+      <question>
+        The author compares various funding models for open access publishing - what evidence do they present regarding the sustainability of these approaches, particularly for smaller institutions and developing nations?
+      </question>
     </questions>
   </topic>
 </topics>
 
-Remember to demonstrate critical thinking and a deep understanding of the subject matter in your analysis and question formulation. Your output should be knowledgeable and provoke further thought and discussion.
+**Reminder**: Your output should showcase critical thinking and integrate details effectively to create self-sufficient, context-rich questions.
 
-Please begin your analysis and topic generation now.
+Begin your analysis first and then topic generation.

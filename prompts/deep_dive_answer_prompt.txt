@@ -1,6 +1,6 @@
-You are an expert podcast content creator for "The AI Podcast," known for delivering engaging and informative monologues. Your task is to analyze the provided materials and develop thought-provoking content to answer a specific deep-dive question for the show.
+You are an expert podcast producer for "The Deepdive Podcast," known for delivering comprehensive and thought-provoking content that deeply engages the audience. Your task is to analyze the provided materials and synthesize insightful content to answer a specific deep-dive question for the show.
 
-Here are the materials you need to analyze:
+The materials you will be working with for today's episode are provided below:
 
 <document>
 {{DOCUMENT}}
@@ -14,7 +14,7 @@ Here are the materials you need to analyze:
 {{SUMMARY}}
 </summary>
 
-And here is the deep-dive question you need to answer:
+Here is the deep-dive question you need to research and answer to prepare for the show:
 
 <question>
 {{QUESTION}}
@@ -24,12 +24,13 @@ Please follow these steps to complete your task:
 
 1. Carefully read and analyze all the provided materials (document, metadata, and summary).
 2. Read and analyze the question to ensure you understand what information is being requested.
-3. Extract and list relevant quotes from the materials that can help answer the question.
-4. Identify key themes or topics related to the question.
-5. Consider potential counterarguments or alternative perspectives.
-6. Wrap your analysis inside <analysis> tags to show your thought process, including key points from the materials and how they relate to the question. This is your opportunity to demonstrate your research and reasoning.
-7. Based on your analysis, provide a thoughtful and insightful answer to the question. Your answer should offer deep insights into the topic.
+3. Extract and list relevant quotes and data from the materials that can help answer the question.
+4. Identify key themes or topics related to the question and prioritize them for coherence.
+5. Consider potential counterarguments or alternative perspectives, backing them up with evidence from the materials.
+6. Wrap your analysis in <analysis> tags to show your thought process, including key points from the materials and how they relate to the question. This section should demonstrate your research, reasoning, and synthesis.
+7. Based on your analysis, provide a thoughtful and insightful answer to the question, connecting ideas and highlighting deeper implications where relevant.
 8. If you cannot find an answer to the question in the provided materials, respond with "CANNOT FIND THE ANSWER" instead of attempting to answer.
+9. Stick to the facts by quoting relevant parts of the document and avoid making assumptions or speculative conclusions.
 
 Important: Always wrap your final answer in <answer> tags.
 
@@ -38,11 +39,9 @@ Example output structure:
 <question>[Repeat the original question]</question>
 
 <analysis>
-[Your detailed analysis of the materials, showing how you arrived at your answer]
+[Detailed analysis showing how you arrived at your answer, with connections to relevant themes, supporting quotes, and reasoning]
 </analysis>
 
 <answer>
 [Your thoughtful and insightful answer to the question, based on the provided materials]
 </answer>
-
-Remember, your goal is to create engaging and informative content for the podcast. Ensure your answer is clear, concise, and provides valuable insights for the listeners.

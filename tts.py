@@ -98,7 +98,7 @@ def generate_audio(
         data = {
             "text": paragraph,
             "model_id": "eleven_multilingual_v2",
-            # "previous_request_ids": previous_request_ids[-3:],
+            "previous_request_ids": previous_request_ids[-1:],
             "previous_text": None if is_first_paragraph else " ".join(paragraphs[:i]),
             "next_text": None if is_last_paragraph else " ".join(paragraphs[i + 1 :]),
             "voice_settings": {

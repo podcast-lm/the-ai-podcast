@@ -1,15 +1,31 @@
 import argparse
 import logging
 import os
+import re
 
-from llm import LLM
 from tts import generate_audio
+
+
+def clean_script(script: str) -> str:
+    """
+    Clean the script by removing annotations in parentheses and square brackets.
+
+    Args:
+        script: The script text to clean
+
+    Returns:
+        str: The cleaned script with annotations removed
+    """
+    # Remove text within parentheses and square brackets
+    cleaned = re.sub(r"\([^)]*\)", "", script)  # Remove (text)
+    cleaned = re.sub(r"\[[^\]]*\]", "", cleaned)  # Remove [text]
+    return cleaned
 
 
 def create_podcast_script(
     input_file: str,
     output_dir: str,
-    anthropic_api_key: str,
+    llm_provider: str,
     model_name: str,
     use_cache: bool = True,
     save_traces: bool = False,
@@ -20,7 +36,7 @@ def create_podcast_script(
     Args:
         input_file: Path to input text file
         output_dir: Directory to write output files
-        anthropic_api_key: Anthropic API key
+        llm_provider: LLM provider to use ('google' or 'anthropic')
         model_name: Name of the model to use
         use_cache: Whether to use cached LLM responses
         save_traces: Whether to save LLM generation traces to files
@@ -29,8 +45,27 @@ def create_podcast_script(
         str: The generated podcast script
     """
     logging.info("Initializing LLM helper")
-    # Initialize LLM helper
-    llm = LLM(api_key=anthropic_api_key, model=model_name)
+    # Initialize LLM helper based on provider
+    if llm_provider == "google":
+        from gemini import LLM
+
+        api_key = os.environ.get("GOOGLE_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "GOOGLE_API_KEY environment variable is required for Google provider"
+            )
+        llm = LLM(api_key=api_key, model=model_name)
+    elif llm_provider == "anthropic":
+        from claude import LLM
+
+        api_key = os.environ.get("ANTHROPIC_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "ANTHROPIC_API_KEY environment variable is required for Anthropic provider"
+            )
+        llm = LLM(api_key=api_key, model=model_name)
+    else:
+        raise ValueError("llm_provider must be either 'google' or 'anthropic'")
 
     # Create traces directory if saving traces
     traces_dir = os.path.join(output_dir, "traces") if save_traces else None
@@ -48,7 +83,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/metadata_note_prompt.txt",
         cache=use_cache,
-        trace_prefix=os.path.join(traces_dir, "metadata") if save_traces else None,
+        trace_prefix=os.path.join(traces_dir, "01_metadata") if save_traces else None,
         DOCUMENT=document,
     )
     source_info = llm.extract_tag(response, "research_note").strip()
@@ -58,7 +93,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/summary_note_prompt.txt",
         cache=use_cache,
-        trace_prefix=os.path.join(traces_dir, "summary") if save_traces else None,
+        trace_prefix=os.path.join(traces_dir, "02_summary") if save_traces else None,
         DOCUMENT=document,
         META=source_info,
     )
@@ -70,7 +105,7 @@ def create_podcast_script(
         "prompts/deep_dive_questions_prompt.txt",
         cache=use_cache,
         response_prefill="<analysis>",
-        trace_prefix=os.path.join(traces_dir, "questions") if save_traces else None,
+        trace_prefix=os.path.join(traces_dir, "03_questions") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -88,7 +123,7 @@ def create_podcast_script(
             response_prefill="The following is the original question, my analysis and answer:",
             cache=use_cache,
             trace_prefix=(
-                os.path.join(traces_dir, f"answer_{i}") if save_traces else None
+                os.path.join(traces_dir, f"04_answer_{i:02d}") if save_traces else None
             ),
             DOCUMENT=document,
             METADATA=source_info,
@@ -104,20 +139,20 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/podcast_plan_prompt.txt",
         cache=use_cache,
-        trace_prefix=os.path.join(traces_dir, "plan") if save_traces else None,
+        trace_prefix=os.path.join(traces_dir, "05_plan") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
         DEEPDIVE=answers,
     )
-    monologue_plan = llm.extract_tag(response, "monologue_planning")
+    monologue_plan = llm.extract_tag(response, "plan")
 
     logging.info("Getting initial monologue draft")
     # Get initial monologue draft
     response = llm.generate(
         "prompts/podcast_draft_prompt.txt",
         cache=use_cache,
-        trace_prefix=os.path.join(traces_dir, "draft") if save_traces else None,
+        trace_prefix=os.path.join(traces_dir, "06_draft") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -131,7 +166,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/podcast_revise_prompt.txt",
         cache=use_cache,
-        trace_prefix=os.path.join(traces_dir, "revised") if save_traces else None,
+        trace_prefix=os.path.join(traces_dir, "07_revised") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -145,7 +180,7 @@ def create_podcast_script(
     response = llm.generate(
         "prompts/podcast_final_prompt.txt",
         cache=use_cache,
-        trace_prefix=os.path.join(traces_dir, "final") if save_traces else None,
+        trace_prefix=os.path.join(traces_dir, "08_final") if save_traces else None,
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
@@ -153,6 +188,9 @@ def create_podcast_script(
         SCRIPT=monologue_improved,
     )
     monologue_final = llm.extract_tag(response, "script")
+
+    # Clean the final script
+    monologue_final = clean_script(monologue_final)
 
     logging.info("Writing script to file")
     script_path = os.path.join(output_dir, "script.txt")
@@ -182,9 +220,20 @@ def parse_args() -> argparse.Namespace:
         "--voice", default="Callum", help="Voice to use for audio generation"
     )
     parser.add_argument(
+        "--llm-provider",
+        choices=["google", "anthropic"],
+        default="anthropic",
+        help="LLM provider to use (google or anthropic)",
+    )
+    parser.add_argument(
         "--model-name",
-        default="claude-3-5-sonnet-20241022",
-        help="Name of the model to use",
+        default="claude-3-sonnet-20240620",
+        choices=[
+            "gemini-1.5-pro-002",
+            "claude-3-sonnet-20240122",
+            "claude-3-5-sonnet-20240620",
+        ],
+        help="Name of the model to use (gemini or claude)",
     )
     parser.add_argument(
         "--save-traces",
@@ -209,17 +258,14 @@ def main() -> None:
     logging.info(f"  Output directory: {args.output_dir}")
     logging.info(f"  Cache enabled: {not args.no_cache}")
     logging.info(f"  Voice: {args.voice}")
+    logging.info(f"  LLM Provider: {args.llm_provider}")
     logging.info(f"  Model: {args.model_name}")
     logging.info(f"  Save traces: {args.save_traces}")
 
     logging.info("Getting API keys from environment")
     # Get API keys from environment
-    anthropic_api_key = os.environ.get("ANTHROPIC_API_KEY")
     elevenlabs_api_key = os.environ.get("ELEVENLABS_API_KEY")
 
-    if not anthropic_api_key:
-        logging.error("Missing ANTHROPIC_API_KEY environment variable")
-        raise ValueError("ANTHROPIC_API_KEY environment variable is required")
     if not elevenlabs_api_key:
         logging.error("Missing ELEVENLABS_API_KEY environment variable")
         raise ValueError("ELEVENLABS_API_KEY environment variable is required")
@@ -233,7 +279,7 @@ def main() -> None:
     script = create_podcast_script(
         input_file=args.input,
         output_dir=args.output_dir,
-        anthropic_api_key=anthropic_api_key,
+        llm_provider=args.llm_provider,
         model_name=args.model_name,
         use_cache=not args.no_cache,
         save_traces=args.save_traces,
