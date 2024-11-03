@@ -230,7 +230,7 @@ def parse_args() -> argparse.Namespace:
         default="claude-3-sonnet-20240620",
         choices=[
             "gemini-1.5-pro-002",
-            "claude-3-sonnet-20240122",
+            "claude-3-5-sonnet-20241022",
             "claude-3-5-sonnet-20240620",
         ],
         help="Name of the model to use (gemini or claude)",
