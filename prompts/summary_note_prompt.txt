@@ -18,51 +18,52 @@ Your task is to carefully analyze this document and create a detailed research n
 2. Conduct a detailed analysis, documenting your thoughts and reasoning.
 3. Format your findings as a final research note.
 
-Before presenting your final research note, wrap your analysis inside <analysis> tags. Focus on writing detailed paragraphs rather than using bullet points. In your analysis, address the following aspects:
+Before presenting your final research note, wrap your analysis inside <analysis> tags. Focus on using detailed paragraphs to ensure clarity. In your analysis, address the following aspects:
 
 a) Summarize the main themes and key points of the document.
 b) Identify and explain key terms and concepts.
-c) Analyze the document's structure and how it affects the content.
+c) Analyze the document's structure and its impact on the content.
 d) Connect the metadata to the document content and explain its significance.
-e) Identify potential biases or limitations in the document.
+e) Identify potential biases or limitations in the document, ensuring impartiality and evidence-based reasoning.
 
-Follow this step-by-step process in your analysis:
-1. Write down 3-5 key quotes from the document that capture its main themes.
+**Step-by-step process for your analysis:**
+
+1. Write down 3-5 key quotes from the document that capture its main themes. Ensure these quotes are representative of different sections or ideas in the document.
 2. For each key quote, explain its significance and how it relates to the overall document.
 3. List the key terms and concepts you've identified, providing a brief explanation for each.
-4. Describe the document's structure, noting how it's organized and how this affects the content.
-5. For each piece of metadata, explicitly connect it to a specific part of the document, explaining how it informs or contextualizes the content.
-6. Reflect on any potential biases or limitations you've noticed, providing specific examples from the text.
+4. Describe the document's structure, noting how it's organized and how this affects the content and its meaning.
+5. For each piece of metadata, explicitly connect it to a specific part of the document and explain how it informs or contextualizes the content. Consider aspects such as publication date, author credentials, or the document's context.
+6. Reflect on any potential biases or limitations you've noticed, supporting your observations with specific examples from the text. Ensure your analysis is neutral and backed by evidence.
 
-After completing your analysis, present your findings using the following format:
+**Before submitting your final note, review it for coherence and accuracy to confirm it aligns with the original document content and metadata.**
+
+**Present your findings using the following format:**
 
 <research_note>
-Task Description: Document analysis and summarization for future reference and compilation.
-
 Summary:
-[Insert a refined 100-word summary that captures the essence of the document]
+[Insert a refined, 100-word summary that captures the essence of the document. Focus on clarity and conciseness.]
 
 Key Points:
 [Present 5-10 key points in paragraph form, each with a citation. Ensure these points are comprehensive and reflect the most important aspects of the document.]
 
 Key Terms and Concepts:
-[List and briefly explain the key terms and concepts you identified in the document]
+[List and briefly explain the key terms and concepts you identified in the document.]
 
 Document Structure Insights:
-[Provide a detailed paragraph on how the document's structure affects its content and meaning]
+[Provide a detailed paragraph on how the document's structure affects its content and meaning.]
 
 Potential Biases or Limitations:
-[Write a thoughtful paragraph on any identified biases or limitations in the document]
+[Write a thoughtful paragraph on any identified biases or limitations in the document, ensuring neutrality and using evidence from the text.]
 </research_note>
 
-Important Reminders:
+**Important Reminders:**
 1. Ensure your analysis is thorough and detailed.
-2. Your summary and key points should accurately reflect the important aspects of the document.
+2. Your summary and key points should accurately reflect the document's most important aspects.
 3. Make your research note clear, concise, and effective for future reference and compilation.
 4. Explicitly use the metadata to contextualize your summary and analysis.
 5. Double-check that all information comes directly from the provided document and metadata.
-6. If you cannot find any of the requested information, explain its absence in the relevant section.
+6. If any requested information is absent, explain its absence in the relevant section.
 7. Provide detailed reasoning for each step of your analysis within the <analysis> tags.
-8. Focus on writing detailed paragraphs throughout your analysis and final note.
+8. Use detailed paragraphs throughout your analysis and final research note.
 
 Begin your response with your detailed analysis in <analysis> tags, followed by the structured research note.

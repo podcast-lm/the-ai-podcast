@@ -8,26 +8,29 @@ Here's the document you need to analyze:
 
 Please follow these steps to extract and present the required information:
 
-1. Carefully read through the entire document.
+1. **Carefully read through the entire document.**
 
-2. Wrap your analysis inside <document_analysis> tags. In your analysis, address the following:
+2. **Wrap your analysis inside <document_analysis> tags**. In your analysis, address the following:
 
-   a. Title: 
+   a. **Title**:
       - Identify prominently displayed text, often at the beginning of the document.
-      - Write down relevant quotes for potential titles.
+      - Write down relevant quotes for potential titles (use the format `"[Quote]"`).
       - List each possibility with supporting evidence.
+      - If the title is not found, specify "Not found".
 
-   b. Author:
+   b. **Author**:
       - Locate names near the title or at the end of the document.
-      - Write down relevant quotes for potential authors.
+      - Write down relevant quotes for potential authors (use the format `"[Quote]"`).
       - List each possibility with supporting evidence.
       - Format the final author name(s) as proper human names (e.g., "John Doe" instead of "doe, j").
+      - If the author is not found, specify "Not found".
 
-   c. Publication date:
+   c. **Publication date**:
       - Identify dates near the title, at the beginning or end of the document, or in headers/footers.
-      - Write down and list all date-related information you find, including relevant quotes.
+      - Write down and list all date-related information you find, including relevant quotes (use the format `"[Quote]"`).
+      - If the publication date is not found, specify "Not found".
 
-   d. Category:
+   d. **Category**:
       - Analyze the document's content, structure, and style to determine its type.
       - For each of the following categories, list specific evidence from the document supporting that classification:
         - Academic Journal
@@ -36,24 +39,36 @@ Please follow these steps to extract and present the required information:
         - Research Paper
         - Social Media Content
         - Other (briefly describe if considering this option)
+      - Provide evidence using `"[Quote]"` format where applicable.
       - After listing evidence for each category, consider arguments for and against each category.
       - Make a final decision based on the strongest evidence and arguments.
+      - If unable to determine a category, specify "Not found".
 
-3. After your analysis, present your findings as a research note using the following format:
+3. **After your analysis, present your findings as a research note** using the following format:
 
 <research_note>
-Task Description: [Briefly describe your role and the task you've performed]
-
-Title: [Insert extracted title]
-Author: [Insert formatted author name(s)]
-Publication Date: [Insert date of publication]
-Category: [Insert determined category]
+Title: [Insert extracted title or "Not found"]
+Author: [Insert formatted author name(s) or "Not found"]
+Publication Date: [Insert date of publication or "Not found"]
+Category: [Insert determined category or "Not found"]
 Category Justification: [Provide a brief explanation for the chosen category]
 
 Summary of Findings:
 [Write a concise paragraph summarizing the key information extracted from the document and any notable observations about its content or structure. Highlight the most important aspects of the document that would be relevant for future research or compilation.]
 </research_note>
 
-If you cannot find any of the requested information, use "Not found" as the value for that field.
+**Example**:
+If the document is an article titled "The Future of AI," written by "Dr. John Smith" and published on "March 15, 2023," your research note should look like:
 
-Remember that your research note will be used for future reference and compilation. Therefore, it's crucial to organize the information clearly and effectively.
+<research_note>
+Title: The Future of AI
+Author: Dr. John Smith
+Publication Date: March 15, 2023
+Category: Research Paper
+Category Justification: The document contains technical analysis, structured sections with references, and is written in a formal tone typical of research publications.
+
+Summary of Findings:
+This document provides an in-depth exploration of emerging trends in AI, including advancements in machine learning algorithms and ethical considerations. It includes supporting data, case studies, and references, suggesting it is intended for an academic audience.
+</research_note>
+
+**Note**: Ensure that all relevant information is quoted directly from the document to maintain accuracy and clarity. If any requested information is not found, specify "Not found" for that field.
