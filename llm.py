@@ -1,21 +1,21 @@
-# pip install google-generativeai
-
 import hashlib
 import json
 import os
 import re
 from typing import Dict, List, Optional, Tuple
 
+import anthropic
 import google.generativeai as genai
 
 
 class LLM:
-    """Helper class to manage LLM interactions"""
+    """Helper class to manage LLM interactions with Claude and Gemini models"""
 
     def __init__(
         self,
         api_key: str,
-        model: str = "gemini-1.5-pro-002",
+        provider: str = "claude",  # "claude" or "gemini"
+        model: str = None,
         cache_dir: str = ".cache",
     ):
         """
@@ -23,21 +23,30 @@ class LLM:
 
         Args:
             api_key: API key for the LLM provider
-            model: Model name to use
+            provider: LLM provider ("claude" or "gemini")
+            model: Model name to use (defaults to latest stable model for each provider)
             cache_dir: Directory to store cached responses
         """
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(
-            model_name=model,
-            generation_config={
-                "temperature": 0.7,
-                "top_p": 0.95,
-                # "top_k": 256,
-                "max_output_tokens": 8192,
-                "response_mime_type": "text/plain",
-            },
-        )
+        self.provider = provider.lower()
         self.cache_dir = cache_dir
+
+        if self.provider == "claude":
+            self.client = anthropic.Anthropic(api_key=api_key)
+            self.model = model or "claude-3-5-sonnet-20240620"
+        elif self.provider == "gemini":
+            genai.configure(api_key=api_key)
+            self.model = genai.GenerativeModel(
+                model_name=model or "gemini-1.5-pro-002",
+                generation_config={
+                    "temperature": 0.7,
+                    "top_p": 0.95,
+                    "max_output_tokens": 8192,
+                    "response_mime_type": "text/plain",
+                },
+            )
+        else:
+            raise ValueError(f"Unsupported provider: {provider}")
+
         if not os.path.exists(cache_dir):
             os.makedirs(cache_dir)
 
@@ -77,6 +86,7 @@ class LLM:
         model: str,
         temperature: float,
         max_tokens: int,
+        trace_prefix: Optional[str] = None,
     ) -> str:
         """
         Compute cache key from prompt and parameters.
@@ -87,6 +97,7 @@ class LLM:
             model: Model name
             temperature: Temperature parameter
             max_tokens: Max tokens to generate
+            trace_prefix: Optional trace prefix for saving prompt/response
 
         Returns:
             str: Cache key hash
@@ -97,6 +108,7 @@ class LLM:
             "model": model,
             "temperature": temperature,
             "max_tokens": max_tokens,
+            "trace_prefix": trace_prefix,
         }
         cache_str = json.dumps(cache_data, sort_keys=True)
         return hashlib.sha256(cache_str.encode()).hexdigest()
@@ -117,7 +129,7 @@ class LLM:
         self,
         template_path: str,
         max_tokens: int = 8192,
-        temperature: float = 0.75,
+        temperature: float = 0.7,
         response_prefill: Optional[str] = None,
         cache: bool = False,
         trace_prefix: Optional[str] = None,
@@ -144,8 +156,16 @@ class LLM:
 
         if cache:
             # Check cache
+            model_name = (
+                self.model if isinstance(self.model, str) else self.model.model_name
+            )
             cache_key = self._compute_cache_key(
-                prompt, response_prefill, self.model.model_name, temperature, max_tokens
+                prompt,
+                response_prefill,
+                model_name,
+                temperature,
+                max_tokens,
+                trace_prefix,
             )
             cache_path = self._get_cache_path(cache_key)
 
@@ -153,13 +173,19 @@ class LLM:
                 with open(cache_path, "r") as f:
                     return f.read()
 
-        chat = self.model.start_chat()
-
-        # if response_prefill:
-        #     chat.send_message(response_prefill)
-
-        response = chat.send_message(prompt)
-        result = response.text
+        if self.provider == "claude":
+            messages = [{"role": "user", "content": prompt}]
+            response = self.client.messages.create(
+                model=self.model,
+                max_tokens=max_tokens,
+                temperature=temperature,
+                messages=messages,
+            )
+            result = response.content[0].text
+        else:  # gemini
+            chat = self.model.start_chat()
+            response = chat.send_message(prompt)
+            result = response.text
 
         if cache:
             # Save to cache

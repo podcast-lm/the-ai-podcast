@@ -3,6 +3,7 @@ import logging
 import os
 import re
 
+from llm import LLM
 from tts import generate_audio
 
 
@@ -47,23 +48,19 @@ def create_podcast_script(
     logging.info("Initializing LLM helper")
     # Initialize LLM helper based on provider
     if llm_provider == "google":
-        from gemini import LLM
-
         api_key = os.environ.get("GOOGLE_API_KEY")
         if not api_key:
             raise ValueError(
                 "GOOGLE_API_KEY environment variable is required for Google provider"
             )
-        llm = LLM(api_key=api_key, model=model_name)
+        llm = LLM(api_key=api_key, provider="gemini", model=model_name)
     elif llm_provider == "anthropic":
-        from claude import LLM
-
         api_key = os.environ.get("ANTHROPIC_API_KEY")
         if not api_key:
             raise ValueError(
                 "ANTHROPIC_API_KEY environment variable is required for Anthropic provider"
             )
-        llm = LLM(api_key=api_key, model=model_name)
+        llm = LLM(api_key=api_key, provider="claude", model=model_name)
     else:
         raise ValueError("llm_provider must be either 'google' or 'anthropic'")
 
@@ -136,6 +133,8 @@ def create_podcast_script(
 
     logging.info("Getting podcast monologue plan")
     # Get podcast monologue plan
+    with open("prompts/show_format.txt") as f:
+        show_format = f.read()
     response = llm.generate(
         "prompts/podcast_plan_prompt.txt",
         cache=use_cache,
@@ -144,6 +143,7 @@ def create_podcast_script(
         METADATA=source_info,
         SUMMARY=source_summary,
         DEEPDIVE=answers,
+        SHOW_FORMAT=show_format,
     )
     monologue_plan = llm.extract_tag(response, "plan")
 
@@ -177,20 +177,69 @@ def create_podcast_script(
 
     logging.info("Getting final monologue")
     # Get final monologue
+    with open("prompts/host_background.txt") as f:
+        host_background = f.read()
     response = llm.generate(
         "prompts/podcast_final_prompt.txt",
         cache=use_cache,
-        trace_prefix=os.path.join(traces_dir, "08_final") if save_traces else None,
+        trace_prefix=(
+            os.path.join(traces_dir, "08_final_before_feedback")
+            if save_traces
+            else None
+        ),
         DOCUMENT=document,
         METADATA=source_info,
         SUMMARY=source_summary,
         DEEPDIVE=answers,
         SCRIPT=monologue_improved,
+        HOST_BACKGROUND=host_background,
+    )
+    monologue_final = llm.extract_tag(response, "script")
+
+    logging.info("Getting audience feedback")
+    # Get 5 audience feedbacks
+    feedbacks = []
+    for i in range(5):
+        logging.info(f"Getting feedback #{i+1}")
+        response = llm.generate(
+            "prompts/audience_feedback_prompt.txt",
+            cache=use_cache,
+            temperature=1.0,
+            trace_prefix=(
+                os.path.join(traces_dir, f"09_feedback_{i+1}") if save_traces else None
+            ),
+            SCRIPT=monologue_final,
+        )
+        feedback = llm.extract_tag(response, "feedback")
+        feedbacks.append(feedback)
+
+    logging.info("Improving script based on feedback")
+    response = llm.generate(
+        "prompts/podcast_final_w_feedback_prompt.txt",
+        cache=use_cache,
+        trace_prefix=(
+            os.path.join(traces_dir, "10_final_after_feedback") if save_traces else None
+        ),
+        DOCUMENT=document,
+        METADATA=source_info,
+        SUMMARY=source_summary,
+        DEEPDIVE=answers,
+        SCRIPT=monologue_final,
+        HOST_BACKGROUND=host_background,
+        FEEDBACK="\n\n".join(
+            f"Feedback #{i}:\n{feedback}" for i, feedback in enumerate(feedbacks, 1)
+        ),
     )
     monologue_final = llm.extract_tag(response, "script")
 
     # Clean the final script
-    monologue_final = clean_script(monologue_final)
+    response = llm.generate(
+        "prompts/cleanup_script_prompt.txt",
+        cache=use_cache,
+        trace_prefix=os.path.join(traces_dir, "11_cleanup") if save_traces else None,
+        SCRIPT=monologue_final,
+    )
+    monologue_final = llm.extract_tag(response, "script")
 
     logging.info("Writing script to file")
     script_path = os.path.join(output_dir, "script.txt")
@@ -217,23 +266,24 @@ def parse_args() -> argparse.Namespace:
         "--no-cache", action="store_true", help="Disable caching of LLM responses"
     )
     parser.add_argument(
-        "--voice", default="Callum", help="Voice to use for audio generation"
+        "--voice", default="Chris", help="Voice to use for audio generation"
     )
     parser.add_argument(
         "--llm-provider",
         choices=["google", "anthropic"],
-        default="anthropic",
+        default="google",
         help="LLM provider to use (google or anthropic)",
     )
     parser.add_argument(
         "--model-name",
-        default="claude-3-sonnet-20240620",
+        default="gemini-1.5-flash-002",
         choices=[
-            "gemini-1.5-pro-002",
-            "claude-3-5-sonnet-20241022",
             "claude-3-5-sonnet-20240620",
+            "claude-3-5-sonnet-20241022",
+            "gemini-1.5-flash-002",
+            "gemini-1.5-pro-002",
         ],
-        help="Name of the model to use (gemini or claude)",
+        help="Name of the model to use",
     )
     parser.add_argument(
         "--save-traces",
