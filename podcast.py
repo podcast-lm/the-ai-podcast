@@ -7,22 +7,6 @@ from llm import LLM
 from tts import generate_audio
 
 
-def clean_script(script: str) -> str:
-    """
-    Clean the script by removing annotations in parentheses and square brackets.
-
-    Args:
-        script: The script text to clean
-
-    Returns:
-        str: The cleaned script with annotations removed
-    """
-    # Remove text within parentheses and square brackets
-    cleaned = re.sub(r"\([^)]*\)", "", script)  # Remove (text)
-    cleaned = re.sub(r"\[[^\]]*\]", "", cleaned)  # Remove [text]
-    return cleaned
-
-
 def create_podcast_script(
     input_file: str,
     output_dir: str,
