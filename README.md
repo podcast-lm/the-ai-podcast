@@ -21,7 +21,7 @@ You can find an example of a generated podcast at [`the-ai-podcast/episode-01-au
 
 This diagram illustrates the podcast creation process:
 ```mermaid
-graph LR
+graph TD
     subgraph "Content Analysis"
     C[Extract Metadata & Summary] --> D[Generate & Answer Questions]
     end
