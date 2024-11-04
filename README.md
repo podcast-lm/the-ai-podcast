@@ -18,6 +18,24 @@ python podcast.py \
 
 You can find an example of a generated podcast at [`the-ai-podcast/episode-01-audio-lm/audio.mp3`](the-ai-podcast/episode-01-audio-lm/audio.mp3).
 
+
+This diagram illustrates the podcast creation process:
+```mermaid
+graph LR
+    subgraph "Content Analysis"
+    C[Extract Metadata & Summary] --> D[Generate & Answer Questions]
+    end
+
+    subgraph "Script Creation"
+        D --> E[Create & Improve Monologue]
+        E --> G[Get & Apply Feedback]
+    end
+
+    subgraph "Output Generation"
+        G --> I[Generate Audio]
+    end
+```
+
 ## Limitations
 
 - Currently, only one source document is supported for podcast creation. If you want to create a podcast from multiple sources, combine them into a single document.
