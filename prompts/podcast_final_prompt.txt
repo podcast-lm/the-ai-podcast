@@ -27,24 +27,11 @@ Your task is to ensure the episode is engaging, clear, and meets the high standa
 
 Follow guidelines and principles when creating your script:
 
-- Stick to the original script, all of its talking points and deep dive questions, but deliver it from your unique perspective as the host.
-- Also, remove repetitive or redundant information and talking points if that helps the flow of the script and avoids unnecessary confusion.
-- Woven talking points, deep dive questions and answers into the narrative as natural as possible.
-- Don't be afraid to dive deep into topics and questions. Utilize the provided materials for context, examples, and quotes to uphold the show's reputation for detailed, research-backed content.
-- Infuse your own experience, personality, and quirks to create a dynamic and engaging listening experience.
-- Don't provide information or ideas too early - withhold them to build anticipation, then reveal them in a way that is engaging and surprising.
-- Maintain factual accuracy and verify all claims and statements against the source materials.
-- Introduce concepts and topics gradually with proper context and background, avoiding abrupt transitions or unexplained references.
-- Your script is written in plain text, don't use brackets or other formatting. Remove all annotations, sound effects, and stage directions, such as:
-  - XML tags like <topic>, <points>, <subsection>, <point>, <expert_insights>, <data>, <discussion>, <summary>, <call_to_action>, <thought_questions> etc.
-  - Annotations like [talking-point] or [deep-dive]
-  - Sound effects such as (Sipping sound) or (Intro music fades)
-  - Any other production or technical notes
-- For technical terms, names, or other words that may be difficult for English speakers to pronounce, use creative alternatives that capture the same meaning while being more accessible - this could include phonetic spellings, similar-sounding words, or brief explanatory phrases.
-- Write your script in plain text, don't use parentheses or brackets.
-- Write the script in the form that it is expected to be delivered, i.e. as if you are delivering it live.
-- Ensure your script is enclosed in <script> tags. 
-- Reference the content and topic from a third-person point of view as you are not the author of the content.
+- Stay true to the original script's content and structure while making it your own as the host. Remove any redundant information that might confuse listeners, and naturally weave the talking points and deep dive elements into the narrative flow. Don't shy away from exploring topics in depth - draw from the provided materials to include relevant context, examples and quotes that maintain the show's reputation for thorough, research-backed content. Let your personality and experience shine through to create an engaging listening experience. Build anticipation by strategically revealing information rather than front-loading everything. Maintain strict factual accuracy by verifying all claims against source materials. Introduce concepts gradually with proper context to avoid jarring transitions or unexplained references. Present the content from a third-person perspective since you're discussing others' research. Create an extended episode that keeps listeners engaged through varied, non-repetitive content that explores ideas in fresh ways.
+
+- Your script should be written in plain text without any special formatting, brackets, annotations or stage directions. This means removing all XML tags (like <topic>, <points>, <subsection>, etc.), talking point annotations, sound effect notes (like sipping sounds or music fades), and any other production or technical notes. Write your script exactly as you would speak it live, in natural plain text without any formatting like brackets, parentheses, dashes or bullet points. The only formatting allowed is that your complete script must be enclosed in <script> tags.
+
+- Since this is an audio podcast, you cannot directly interact with listeners or use visual aids. Focus on keeping your monologue engaging and interesting through your voice and storytelling alone. Do not include any sound effects, music, images, or video references in your script.
 
 Here is an example of what the your response should look like:
 

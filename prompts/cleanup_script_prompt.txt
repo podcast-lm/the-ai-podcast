@@ -5,20 +5,14 @@ Given a script for a podcast episode as follows:
 </script>
 
 Your task is to remove all annotations, sound effects, and stage directions, such as:
+
 - XML tags like <topic>, <points>, <subsection>, <point>, <expert_insights>, <data>, <discussion>, <summary>, <call_to_action>, <thought_questions> etc.
 - Annotations like [talking-point] or [deep-dive]
 - Directions such as (Sipping sound) or (Intro music fades)
 - Any other production or technical notes
 
-Moreover, replace *text* form with the "text" form. Remove underscores as well.
-
-There are cases where there are words or phrases that are hard to pronounce for English speakers, or it is not a word in English, in this case your should replace them with the closest sounding word or phrase or their spelling.
-
 Only keep the text of the script that would be read or spoken by the host. All other text is extraneous and should be removed.
-
-Return only the cleaned script, enclosed in <script> tags.
-
-Your response should look like this:
+Return only the cleaned script, enclosed in <script> tags. Your response should look like this:
 
 <script>
 The cleaned script here...

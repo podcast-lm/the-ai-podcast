@@ -180,41 +180,46 @@ def create_podcast_script(
     )
     monologue_final = llm.extract_tag(response, "script")
 
-    logging.info("Getting audience feedback")
-    # Get 5 audience feedbacks
-    feedbacks = []
-    for i in range(5):
-        logging.info(f"Getting feedback #{i+1}")
-        response = llm.generate(
-            "prompts/audience_feedback_prompt.txt",
-            cache=use_cache,
-            temperature=1.0,
-            trace_prefix=(
-                os.path.join(traces_dir, f"09_feedback_{i+1}") if save_traces else None
-            ),
-            SCRIPT=monologue_final,
-        )
-        feedback = llm.extract_tag(response, "feedback")
-        feedbacks.append(feedback)
+    for iteration in range(3):
+        logging.info(f"Getting audience feedback, iteration {iteration+1}")
+        # Get 3 audience feedbacks
+        feedbacks = []
+        for i in range(3):
+            logging.info(f"Getting feedback #{i+1}")
+            response = llm.generate(
+                "prompts/audience_feedback_prompt.txt",
+                cache=use_cache,
+                temperature=1.0,
+                trace_prefix=(
+                    os.path.join(traces_dir, f"09_feedback_{iteration+1}_{i+1}")
+                    if save_traces
+                    else None
+                ),
+                SCRIPT=monologue_final,
+            )
+            feedback = llm.extract_tag(response, "feedback")
+            feedbacks.append(feedback)
 
-    logging.info("Improving script based on feedback")
-    response = llm.generate(
-        "prompts/podcast_final_w_feedback_prompt.txt",
-        cache=use_cache,
-        trace_prefix=(
-            os.path.join(traces_dir, "10_final_after_feedback") if save_traces else None
-        ),
-        DOCUMENT=document,
-        METADATA=source_info,
-        SUMMARY=source_summary,
-        DEEPDIVE=answers,
-        SCRIPT=monologue_final,
-        HOST_BACKGROUND=host_background,
-        FEEDBACK="\n\n".join(
-            f"Feedback #{i}:\n{feedback}" for i, feedback in enumerate(feedbacks, 1)
-        ),
-    )
-    monologue_final = llm.extract_tag(response, "script")
+        logging.info("Improving script based on feedback")
+        response = llm.generate(
+            "prompts/podcast_final_w_feedback_prompt.txt",
+            cache=use_cache,
+            trace_prefix=(
+                os.path.join(traces_dir, f"10_final_after_feedback_{iteration+1}")
+                if save_traces
+                else None
+            ),
+            DOCUMENT=document,
+            METADATA=source_info,
+            SUMMARY=source_summary,
+            DEEPDIVE=answers,
+            SCRIPT=monologue_final,
+            HOST_BACKGROUND=host_background,
+            FEEDBACK="\n\n".join(
+                f"Feedback #{i}:\n{feedback}" for i, feedback in enumerate(feedbacks, 1)
+            ),
+        )
+        monologue_final = llm.extract_tag(response, "script")
 
     # Clean the final script
     response = llm.generate(
@@ -264,6 +269,7 @@ def parse_args() -> argparse.Namespace:
         choices=[
             "claude-3-5-sonnet-20240620",
             "claude-3-5-sonnet-20241022",
+            # "claude-3-5-haiku-20241022",
             "gemini-1.5-flash-002",
             "gemini-1.5-pro-002",
         ],
@@ -273,6 +279,16 @@ def parse_args() -> argparse.Namespace:
         "--save-traces",
         action="store_true",
         help="Save LLM generation traces to files",
+    )
+    parser.add_argument(
+        "--script-only",
+        action="store_true",
+        help="Only generate script without audio",
+    )
+    parser.add_argument(
+        "--audio-only",
+        action="store_true",
+        help="Only generate audio from existing script.txt",
     )
     return parser.parse_args()
 
@@ -287,6 +303,10 @@ def main() -> None:
     logging.info("Starting podcast generation")
     args = parse_args()
 
+    if args.script_only and args.audio_only:
+        logging.error("Cannot use both --script-only and --audio-only")
+        raise ValueError("Cannot use both --script-only and --audio-only")
+
     logging.info("Configuration:")
     logging.info(f"  Input file: {args.input}")
     logging.info(f"  Output directory: {args.output_dir}")
@@ -295,12 +315,14 @@ def main() -> None:
     logging.info(f"  LLM Provider: {args.llm_provider}")
     logging.info(f"  Model: {args.model_name}")
     logging.info(f"  Save traces: {args.save_traces}")
+    logging.info(f"  Script only: {args.script_only}")
+    logging.info(f"  Audio only: {args.audio_only}")
 
     logging.info("Getting API keys from environment")
     # Get API keys from environment
     elevenlabs_api_key = os.environ.get("ELEVENLABS_API_KEY")
 
-    if not elevenlabs_api_key:
+    if not args.script_only and not elevenlabs_api_key:
         logging.error("Missing ELEVENLABS_API_KEY environment variable")
         raise ValueError("ELEVENLABS_API_KEY environment variable is required")
 
@@ -308,26 +330,34 @@ def main() -> None:
     # Create output directory if it doesn't exist
     os.makedirs(args.output_dir, exist_ok=True)
 
-    logging.info("Generating podcast script")
-    # Generate podcast script and audio
-    script = create_podcast_script(
-        input_file=args.input,
-        output_dir=args.output_dir,
-        llm_provider=args.llm_provider,
-        model_name=args.model_name,
-        use_cache=not args.no_cache,
-        save_traces=args.save_traces,
-    )
+    script = None
+    if args.audio_only:
+        script_path = os.path.join(args.output_dir, "script.txt")
+        if not os.path.exists(script_path):
+            logging.error(f"Script file not found: {script_path}")
+            raise FileNotFoundError(f"Script file not found: {script_path}")
+        with open(script_path) as f:
+            script = f.read()
+    else:
+        logging.info("Generating podcast script")
+        script = create_podcast_script(
+            input_file=args.input,
+            output_dir=args.output_dir,
+            llm_provider=args.llm_provider,
+            model_name=args.model_name,
+            use_cache=not args.no_cache,
+            save_traces=args.save_traces,
+        )
 
-    logging.info("Generating audio from script")
-    # Generate audio from script
-    generate_audio(
-        script=script,
-        output_dir=args.output_dir,
-        elevenlabs_api_key=elevenlabs_api_key,
-        voice=args.voice,
-        use_cache=not args.no_cache,
-    )
+    if not args.script_only:
+        logging.info("Generating audio from script")
+        generate_audio(
+            script=script,
+            output_dir=args.output_dir,
+            elevenlabs_api_key=elevenlabs_api_key,
+            voice=args.voice,
+            use_cache=not args.no_cache,
+        )
 
     logging.info("Podcast generation complete")
 

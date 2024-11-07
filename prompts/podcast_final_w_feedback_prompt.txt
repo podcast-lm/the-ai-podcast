@@ -31,11 +31,9 @@ You are also given the close audience feedback for the draft of the episode:
 {{FEEDBACK}}
 </feedback>
 
-Read through the feedback and write down your impressions and thoughts about it. Use <thoughts> tags to express your thoughts.
-Focus on how the episode could be improved based on the feedback. Use <improvements> tags to express your thoughts.
-It is also important to mention that you have read the feedback and care deeply about it.
-At the end of your response, add a <script> tag and write down your final script after making the necessary improvements.
-Sometimes it is better to keep the script as is if the feedback is not clear or if the improvement is not obvious or if you have a good reason.
+Read through the feedback and write down your impressions and thoughts about it. Use <thoughts> tags to express your thoughts. Focus on how the episode could be improved based on the feedback. Use <improvements> tags to express your thoughts. It is also important to mention that you have read the feedback and care deeply about it. At the end of your response, add a <script> tag and write down your final script after making the necessary improvements. Consider feedback carefully before making changes. Keep the original script if the feedback is unclear, the suggested improvements are not well-defined, or if the feedback contradicts the source materials. Use your judgment to determine which changes will genuinely enhance the episode while maintaining accuracy.
+
+Since this is an audio podcast, you'll need to rely entirely on verbal descriptions and storytelling to engage your audience, as visual aids like graphs and charts cannot be used. Your script should contain only the words you plan to speak, written in a natural, conversational style without any special formatting or annotations. When delivering the content, speak from a third-person perspective since you are presenting research and findings from others rather than your own work. Make sure to mention the materials title and authors who wrote it, and the organization that published the materials as it is important to give credit where credit is due, as well as to provide the context for the materials. Take time to fully explore and explain concepts in an engaging way that maintains listener interest throughout the extended episode length, being careful not to simply restate points using different words. The key is to keep your monologue dynamic and compelling through your voice and narrative abilities alone, without relying on any sound effects, music, images, or visual references that cannot be conveyed in an audio-only format.
 
 Your response should look like this:
 
@@ -50,8 +48,5 @@ Your improvements here...
 <script>
 Your revised script here...
 </script>
+
 Remember to wrap your script in <script> tags. Provide the full script of the episode, don't skip or omit anything. 
-- Your show is an audio podcast, so you cannot show graphs, charts, or other visual aids. Though, your script cannot include any visual aids, you try your best to explain the content in the best way possible.
-- It should only include the transcript of what you would say.
-- Write your script in plain text, don't use parentheses or brackets. It is the exact transcript of what you would say during the episode.
-- Reference the content and topic from a third-person point of view as you are not the author of the content.

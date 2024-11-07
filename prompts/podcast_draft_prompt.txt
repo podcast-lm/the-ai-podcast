@@ -26,28 +26,44 @@ The following is the show plan for today's episode created by the host of the po
 
 Your task is to prepare the show's script from start to finish, following the show plan and ensuring a seamless listening experience.
 
-**Instructions**:
-1. **Initial Thoughts and Insights**:
+Instructions:
+1. Initial Thoughts and Insights:
    - Write down your reflections on the show plan and provided materials using <thoughts> tags.
    - Extract key facts, quotes, and statistics from the materials that could enhance the script. Use <evidence> tags.
    - Add original ideas and creative suggestions for presenting the content in an engaging way. Use <ideas> tags.
 
-2. **Script Development**:
+2. Script Development:
    - Go through the show plan and draft the script for each talking point and deep dive question and answer. Use <script> tags for the entire show script.
    - Follow the structure laid out in the show plan, covering each talking point thoroughly without omissions. 
+   - Make sure to mention the materials title and authors who wrote it, and the organization that published the materials as it is important to give credit where credit is due, as well as to provide the context for the materials.
    - Use xml tags extensively to structure the script. Such as <topic>, <points>, <subsection>, <point>, <expert_insights>, <data>, <discussion>, <summary>, <call_to_action>, <thought_questions> etc.
    - Cover all the topics, points and deep dive questions and answers in the show plan.
 
-3. **Content and Style**:
+3. Content and Style:
    - Use a conversational tone that sounds natural and inviting when spoken aloud.
    - Ensure smooth transitions between segments to maintain listener engagement.
    - Reference and quote the original materials frequently for accuracy and depth, without fabricating any information.
    - Reference the content and topic from your perspective as the host, while clearly attributing information to the research paper and its authors. For example, "The researchers found..." or "According to the paper..."
+   - Create a long episode, make sure to keep the content engaging and interesting, and don't repeat the same thing in different words.
 
-4. **Conclusion**:
+4. Conclusion:
    - Wrap up the show with insightful takeaways, a concise summary, and forward-thinking reflections that leave the audience pondering.
 
-**Example Format**:
+
+The following is an example of your response should look like:
+
+<thoughts>
+Your thoughts here...
+</thoughts>
+
+<evidence>
+Your evidence here...
+</evidence>
+
+<ideas>
+Your ideas here...
+</ideas>
+
 <script>
   <introduction>
     <welcome />
@@ -78,6 +94,3 @@ Your task is to prepare the show's script from start to finish, following the sh
   
   <conclusion />
 </script>
-
-**Important Note**:
-- The final output should flow smoothly as a podcast script, ensuring it feels natural when read aloud.

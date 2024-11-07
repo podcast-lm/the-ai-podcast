@@ -1,8 +1,6 @@
-You are an expert podcast producer tasked with refining and enhancing an engaging and informative monologue for the renowned podcast, "The Deep Dive Podcast." Your role is to deliver content that is both compelling and thought-provoking, showcasing deep knowledge and fostering genuine audience engagement.
+You are an expert podcast producer tasked with refining and enhancing an engaging and informative monologue for the renowned podcast, "The Deep Dive Podcast." Your role is to deliver content that is both compelling and thought-provoking, and to foster genuine audience engagement and curiosity on the topic.
 
 The materials you'll work with are provided below:
-
-
 <document>
 {{DOCUMENT}}
 </document>
@@ -24,8 +22,8 @@ The materials you'll work with are provided below:
 </draft>
 
 
-### Your Task:
-**1. Analyze the Draft**  
+Your Task:
+1. Analyze the Draft  
 Conduct a thorough analysis of the current draft, assessing its strengths, weaknesses, and potential areas for improvement. Document your insights within `<thoughts>` tags, focusing on:
 
 - The flow and overall narrative structure
@@ -35,7 +33,7 @@ Conduct a thorough analysis of the current draft, assessing its strengths, weakn
 - Balance of perspectives and identification of any biases
 - Opportunities for elaboration and deeper exploration
 
-**2. Revise and Enhance the Script**  
+2. Revise and Enhance the Script  
 Refine and elevate the draft while maintaining its original content and structure. Your revision should:
 
 - Use xml tags extensively to structure the script. Such as <topic>, <points>, <subsection>, <point>, <expert_insights>, <data>, <discussion>, <summary>, <call_to_action>, <thought_questions> etc.
@@ -52,46 +50,33 @@ Refine and elevate the draft while maintaining its original content and structur
 - Consider the ethical implications of the content where applicable
 - Use clear and simple language to make complex topics accessible
 - Reference the content and topic from a third-person point of view as you are not the author of the content.
+- Create a long episode, make sure to keep the content engaging and interesting, and don't repeat the same thing in different words.
 
-### Final Deliverable:
+Final Deliverable:
 Present your polished, enhanced script within `<script>` tags, ensuring it is ready for production and can captivate and inform listeners effectively.
 
-**Example Output**:
+Your response should look like this:
 
 <thoughts>
-    <strengths>
-        <strength>The introduction effectively hooks the listener with a compelling opening</strength>
-        <strength>Clear context is established early to frame the discussion</strength>
-    </strengths>
+    Analyze strengths like how well the introduction hooks listeners and establishes context.
     
-    <weaknesses>
-        <weakness>Transition between second and third sections lacks smooth flow</weakness>
-        <weakness>Some technical concepts could use more accessible explanations</weakness>
-    </weaknesses>
+    Identify weaknesses such as awkward transitions and unclear technical explanations.
     
-    <opportunities>
-        <opportunity>Add concrete example in conclusion to reinforce key takeaway</opportunity>
-        <opportunity>Incorporate more real-world applications throughout</opportunity>
-    </opportunities>
+    Look for opportunities to add examples and real-world applications.
     
-    <engagement>
-        <suggestion>Insert thought-provoking question midway to encourage listener reflection</suggestion>
-        <suggestion>Include more interactive elements to maintain audience interest</suggestion>
-    </engagement>
+    Suggest ways to improve engagement through questions and interactive elements.
 </thoughts>
 
 <script>
   <introduction>
     <opening>
-      <hook>Welcome to 'The Deep Dive Podcast,' where we explore the cutting edge of artificial intelligence and its profound impact on the world.</hook>
-      <topic_intro>Today, we're diving deep into the realm of machine learning interpretability—a topic as crucial as it is complex.</topic_intro>
+      <hook>Opening hook that grabs attention</hook>
+      <topic_intro>Introduction of the main topic</topic_intro>
       <analogy>
-        <setup>Imagine you're driving a car that suddenly decides to change lanes without telling you why.</setup>
-        <connection>That's essentially what a 'black box' AI model does, and understanding its decisions is essential.</connection>
+        <setup>Setup of an analogy to explain the concept</setup>
+        <connection>Connection of the analogy to the topic</connection>
       </analogy>
     </opening>
   </introduction>
   <continues with enhanced script...>
 </script>
-
-This example gives a clear illustration of how the analysis and revision should look, helping guide the completion of your task.
