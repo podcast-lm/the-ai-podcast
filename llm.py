@@ -2,19 +2,20 @@ import hashlib
 import json
 import os
 import re
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Optional
 
 import anthropic
 import google.generativeai as genai
+from openai import OpenAI
 
 
 class LLM:
-    """Helper class to manage LLM interactions with Claude and Gemini models"""
+    """Helper class to manage LLM interactions with Claude, Gemini and OpenAI models"""
 
     def __init__(
         self,
         api_key: str,
-        provider: str = "claude",  # "claude" or "gemini"
+        provider: str = "claude",  # "claude", "gemini" or "openai"
         model: str = None,
         cache_dir: str = ".cache",
     ):
@@ -23,7 +24,7 @@ class LLM:
 
         Args:
             api_key: API key for the LLM provider
-            provider: LLM provider ("claude" or "gemini")
+            provider: LLM provider ("claude", "gemini" or "openai")
             model: Model name to use (defaults to latest stable model for each provider)
             cache_dir: Directory to store cached responses
         """
@@ -44,6 +45,9 @@ class LLM:
                     "response_mime_type": "text/plain",
                 },
             )
+        elif self.provider == "openai":
+            self.client = OpenAI(api_key=api_key)
+            self.model = model or "gpt-4"
         else:
             raise ValueError(f"Unsupported provider: {provider}")
 
@@ -182,6 +186,17 @@ class LLM:
                 messages=messages,
             )
             result = response.content[0].text
+        elif self.provider == "openai":
+            response = self.client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "user", "content": [{"type": "text", "text": prompt}]}
+                ],
+                temperature=temperature,
+                max_tokens=max_tokens,
+                response_format={"type": "text"},
+            )
+            result = response.choices[0].message.content
         else:  # gemini
             chat = self.model.start_chat()
             response = chat.send_message(prompt)

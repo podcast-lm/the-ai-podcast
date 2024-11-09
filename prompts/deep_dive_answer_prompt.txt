@@ -34,7 +34,7 @@ Please follow these steps to complete your task:
 
 Important: Always wrap your final answer in <answer> tags.
 
-Example output structure:
+Your response should be structured as follows:
 
 <question>[Repeat the original question]</question>
 
@@ -45,3 +45,5 @@ Example output structure:
 <answer>
 [Your thoughtful and insightful answer to the question, based on the provided materials]
 </answer>
+
+Remember to close the xml tags.

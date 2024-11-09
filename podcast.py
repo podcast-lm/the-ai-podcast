@@ -21,7 +21,7 @@ def create_podcast_script(
     Args:
         input_file: Path to input text file
         output_dir: Directory to write output files
-        llm_provider: LLM provider to use ('google' or 'anthropic')
+        llm_provider: LLM provider to use ('google', 'anthropic' or 'openai')
         model_name: Name of the model to use
         use_cache: Whether to use cached LLM responses
         save_traces: Whether to save LLM generation traces to files
@@ -45,8 +45,15 @@ def create_podcast_script(
                 "ANTHROPIC_API_KEY environment variable is required for Anthropic provider"
             )
         llm = LLM(api_key=api_key, provider="claude", model=model_name)
+    elif llm_provider == "openai":
+        api_key = os.environ.get("OPENAI_API_KEY")
+        if not api_key:
+            raise ValueError(
+                "OPENAI_API_KEY environment variable is required for OpenAI provider"
+            )
+        llm = LLM(api_key=api_key, provider="openai", model=model_name)
     else:
-        raise ValueError("llm_provider must be either 'google' or 'anthropic'")
+        raise ValueError("llm_provider must be 'google', 'anthropic' or 'openai'")
 
     # Create traces directory if saving traces
     traces_dir = os.path.join(output_dir, "traces") if save_traces else None
@@ -259,9 +266,9 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument(
         "--llm-provider",
-        choices=["google", "anthropic"],
+        choices=["google", "anthropic", "openai"],
         default="google",
-        help="LLM provider to use (google or anthropic)",
+        help="LLM provider to use (google, anthropic or openai)",
     )
     parser.add_argument(
         "--model-name",
@@ -272,6 +279,8 @@ def parse_args() -> argparse.Namespace:
             # "claude-3-5-haiku-20241022",
             "gemini-1.5-flash-002",
             "gemini-1.5-pro-002",
+            "gpt-4o",
+            "gpt-4o-mini",
         ],
         help="Name of the model to use",
     )
